@@ -4,6 +4,8 @@ package gbalib
 
 import "runtime/volatile"
 
+// Types
+
 type VolatileReg16 struct {
 	volatile.Register16
 }
@@ -11,6 +13,8 @@ type VolatileReg16 struct {
 type VolatileReg32 struct {
 	volatile.Register32
 }
+
+// Helpers
 
 func (r *VolatileReg16) Init(v ...uint16) {
 	var newRegValue uint16
