@@ -6,5 +6,5 @@
         "analyses": {
             "unsafeptr": false,
         }
-    }
+    },
 }

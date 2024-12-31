@@ -2,12 +2,14 @@
 
 package gbalib
 
-import "unsafe"
+import (
+	"unsafe"
+)
 
 // Types
 
 type MemIoType struct {
-	RegDisplayControl *Reg32
+	RegDisplayControl *VolatileReg32
 }
 
 // Memory maps
@@ -40,5 +42,5 @@ const (
 )
 
 var MemIo = MemIoType{
-	RegDisplayControl: (*Reg32)(unsafe.Pointer((uintptr(RegDisplayControlAddr)))),
+	RegDisplayControl: (*VolatileReg32)(unsafe.Pointer(uintptr(RegDisplayControlAddr))),
 }
