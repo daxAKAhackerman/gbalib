@@ -1,8 +1,6 @@
 package main
 
-import (
-	"gbalib"
-)
+import "gbalib"
 
 func main() {
 	gbalib.MemIo.RegDisplayControl.Init(
