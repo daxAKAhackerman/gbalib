@@ -40,7 +40,7 @@ const RegDisplayControl1DObjectMapping = 0x40
 const RegDisplayControlScreenBlank = 0x80
 
 const (
-	RegDisplayControlBgMask  = 0x0f00
+	RegDisplayControlBgMask  = 0x0F00
 	RegDisplayControlBgShift = 8
 
 	RegDisplayControlBg0             = 0x01 << RegDisplayControlBgShift
@@ -51,7 +51,7 @@ const (
 )
 
 const (
-	RegDisplayControlWindowMask  = 0xe000
+	RegDisplayControlWindowMask  = 0xE000
 	RegDisplayControlWindowShift = 13
 
 	RegDisplayControlWindow0      = 0x01 << RegDisplayControlWindowShift
@@ -69,7 +69,7 @@ const (
 )
 
 const (
-	RegDisplayStatusVCountTriggerMask  = 0xff00
+	RegDisplayStatusVCountTriggerMask  = 0xFF00
 	RegDisplayStatusVCountTriggerShift = 8
 )
 

@@ -2,7 +2,10 @@
 
 package gbalib
 
-import "runtime/volatile"
+import (
+	"runtime/volatile"
+	"unsafe"
+)
 
 // Types
 
@@ -102,4 +105,30 @@ func (r *VolatileReg16) ClearField(mask uint16) {
 
 func (r *VolatileReg32) ClearField(mask uint32) {
 	r.Set(r.Get() &^ mask)
+}
+
+func MemSet16(destination *uint16, value uint16, hwcount uint32) {
+	if uintptr(unsafe.Pointer(destination))%4 != 0 {
+		*destination = value
+		destination = (*uint16)(unsafe.Pointer((uintptr(unsafe.Pointer(destination)) + 2)))
+		hwcount--
+	}
+
+	leftover := hwcount%2 != 0
+	wcount := hwcount / 2
+
+	MemSet32((*uint32)(unsafe.Pointer(destination)), uint32(value)|uint32(value)<<16, wcount)
+
+	if leftover {
+		lastptr := uintptr(unsafe.Pointer(destination)) + uintptr(wcount)*4
+		*(*uint16)(unsafe.Pointer(lastptr)) = value
+	}
+}
+
+func MemSet32(destination *uint32, value uint32, wcount uint32) {
+	s := unsafe.Slice(destination, wcount)
+
+	for i := uint32(0); i < wcount; i++ {
+		s[i] = uint32(value) | uint32(value)<<16
+	}
 }
