@@ -18,9 +18,13 @@ const (
 const (
 	M3Width  = ScreenWidth
 	M3Height = ScreenHeight
+	M4Width  = ScreenWidth
+	M4Height = ScreenHeight
 	M5Width  = 160
 	M5Height = 128
 )
+
+const VramPageSize = 0xA000
 
 const (
 	ClrBlack   = Color(0x0000)
@@ -40,8 +44,12 @@ const MemVramAddr = 0x06000000
 // Memory handles
 
 var MemVram = (*uint16)(unsafe.Pointer(uintptr(MemVramAddr)))
-var M3MemVram = (*[M3Width * M3Height]Color)(unsafe.Pointer(MemVram))
-var M5MemVram = (*[M5Width * M5Height]Color)(unsafe.Pointer(MemVram))
+var MemVramBack = (*uint16)(unsafe.Pointer(uintptr(MemVramAddr + VramPageSize)))
+var M3MemVram = (*[M3Height][M3Width]Color)(unsafe.Pointer(MemVram))
+var M4MemVram = (*[M4Height][M4Width]uint8)(unsafe.Pointer(MemVram))
+var M4MemVramBack = (*[M4Height][M4Width]uint8)(unsafe.Pointer(MemVramBack))
+var M5MemVram = (*[M5Height][M5Width]Color)(unsafe.Pointer(MemVram))
+var M5MemVramBack = (*[M5Height][M5Width]Color)(unsafe.Pointer(MemVramBack))
 
 // Helpers
 
@@ -83,36 +91,44 @@ func M3Fill(c Color) {
 	MemSet32((*uint32)(unsafe.Pointer(MemVram)), uint32(c)|uint32(c)<<16, uint32(M3Width*M3Height/2))
 }
 
-func M5Plot(x, y int32, c Color) {
-	s := unsafe.Slice(MemVram, M5Width*M5Height)
-	Bmp16Plot(x, y, M5Width, uint16(c), &s)
+func M3Clear() {
+	MemSet32((*uint32)(unsafe.Pointer(MemVram)), 0x00, uint32(M3Width*M3Height/2))
 }
 
-func M5HLine(x1, y, x2 int32, c Color) {
-	s := unsafe.Slice(MemVram, M5Width*M5Height)
-	Bmp16HLine(x1, y, x2, M5Width, uint16(c), &s)
-}
+// func M5Plot(x, y int32, c Color) {
+// 	s := unsafe.Slice(MemVram, M5Width*M5Height)
+// 	Bmp16Plot(x, y, M5Width, uint16(c), &s)
+// }
 
-func M5VLine(x, y1, y2 int32, c Color) {
-	s := unsafe.Slice(MemVram, M5Width*M5Height)
-	Bmp16VLine(x, y1, y2, M5Width, uint16(c), &s)
-}
+// func M5HLine(x1, y, x2 int32, c Color) {
+// 	s := unsafe.Slice(MemVram, M5Width*M5Height)
+// 	Bmp16HLine(x1, y, x2, M5Width, uint16(c), &s)
+// }
 
-func M5Line(x1, y1, x2, y2 int32, c Color) {
-	s := unsafe.Slice(MemVram, M5Width*M5Height)
-	Bmp16Line(x1, y1, x2, y2, M5Width, uint16(c), &s)
-}
+// func M5VLine(x, y1, y2 int32, c Color) {
+// 	s := unsafe.Slice(MemVram, M5Width*M5Height)
+// 	Bmp16VLine(x, y1, y2, M5Width, uint16(c), &s)
+// }
 
-func M5Rect(left, top, right, bottom int32, c Color) {
-	s := unsafe.Slice(MemVram, M5Width*M5Height)
-	Bmp16Rect(left, top, right, bottom, M5Width, uint16(c), &s)
-}
+// func M5Line(x1, y1, x2, y2 int32, c Color) {
+// 	s := unsafe.Slice(MemVram, M5Width*M5Height)
+// 	Bmp16Line(x1, y1, x2, y2, M5Width, uint16(c), &s)
+// }
 
-func M5Frame(left, top, right, bottom int32, c Color) {
-	s := unsafe.Slice(MemVram, M5Width*M5Height)
-	Bmp16Frame(left, top, right, bottom, M5Width, uint16(c), &s)
-}
+// func M5Rect(left, top, right, bottom int32, c Color) {
+// 	s := unsafe.Slice(MemVram, M5Width*M5Height)
+// 	Bmp16Rect(left, top, right, bottom, M5Width, uint16(c), &s)
+// }
 
-func M5Fill(c Color) {
-	MemSet32((*uint32)(unsafe.Pointer(MemVram)), uint32(c)|uint32(c)<<16, uint32(M5Width*M5Height/2))
-}
+// func M5Frame(left, top, right, bottom int32, c Color) {
+// 	s := unsafe.Slice(MemVram, M5Width*M5Height)
+// 	Bmp16Frame(left, top, right, bottom, M5Width, uint16(c), &s)
+// }
+
+// func M5Fill(c Color) {
+// 	MemSet32((*uint32)(unsafe.Pointer(MemVram)), uint32(c)|uint32(c)<<16, uint32(M5Width*M5Height/2))
+// }
+
+// func M5Clear() {
+// 	MemSet32((*uint32)(unsafe.Pointer(MemVram)), 0x00, uint32(M5Width*M5Height/2))
+// }

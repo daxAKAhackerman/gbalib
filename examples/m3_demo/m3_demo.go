@@ -3,7 +3,10 @@ package main
 import "gbalib"
 
 func main() {
-	var i, j int32
+	var (
+		i int32
+		j uint32
+	)
 
 	gbalib.MemIo.RegDisplayControl.Init(gbalib.RegDisplayControlMode3, gbalib.RegDisplayControlBg2)
 
@@ -22,15 +25,15 @@ func main() {
 
 	// Lines in top right frame
 	for i = 0; i <= 8; i++ {
-		j = 3*i + 7
-		gbalib.M3Line(132+11*i, 9, 226, 12+7*i, gbalib.MakeRgb15(uint32(j), 0, uint32(j)))
-		gbalib.M3Line(226-11*i, 70, 133, 69-7*i, gbalib.MakeRgb15(uint32(j), 0, uint32(j)))
+		j = 3*uint32(i) + 7
+		gbalib.M3Line(132+11*i, 9, 226, 12+7*i, gbalib.MakeRgb15(j, 0, j))
+		gbalib.M3Line(226-11*i, 70, 133, 69-7*i, gbalib.MakeRgb15(j, 0, j))
 	}
 
 	// Lines in bottom left frame
 	for i = 0; i <= 8; i++ {
-		j = 3*i + 7
-		gbalib.M3Line(15+11*i, 88, 104-11*i, 150, gbalib.MakeRgb15(0, uint32(j), uint32(j)))
+		j = 3*uint32(i) + 7
+		gbalib.M3Line(15+11*i, 88, 104-11*i, 150, gbalib.MakeRgb15(0, j, j))
 	}
 
 	for {
