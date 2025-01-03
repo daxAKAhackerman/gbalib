@@ -3,9 +3,10 @@
 package gbalib
 
 func Bmp8Plot(x, y, w int32, cid uint8, d *[]uint16) {
-	if x&0x01 == 1 {
-		(*d)[(y*w+x)/2] = (*d)[(y*w+x)/2]&0xFF00 | uint16(cid)
+	v := (*d)[(y*w+x)/2]
+	if x%2 == 0 {
+		(*d)[(y*w+x)/2] = v&0xFF00 | uint16(cid)&0xFF
 	} else {
-		(*d)[(y*w+x)/2] = (*d)[(y*w+x)/2]&0x00FF | uint16(cid)<<8
+		(*d)[(y*w+x)/2] = v&0xFF | uint16(cid)<<8
 	}
 }
