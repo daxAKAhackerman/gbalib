@@ -22,55 +22,55 @@ const RegScanlineCounterAddr = MemIoAddr + 0x06
 // Memory defs
 
 const (
-	RegDisplayControlModeMask  = 0x07
-	RegDisplayControlModeShift = 0
+	DisplayControlModeMask  = 0x07
+	DisplayControlModeShift = 0
 
-	RegDisplayControlMode0 = 0x00 << RegDisplayControlModeShift
-	RegDisplayControlMode1 = 0x01 << RegDisplayControlModeShift
-	RegDisplayControlMode2 = 0x02 << RegDisplayControlModeShift
-	RegDisplayControlMode3 = 0x03 << RegDisplayControlModeShift
-	RegDisplayControlMode4 = 0x04 << RegDisplayControlModeShift
-	RegDisplayControlMode5 = 0x05 << RegDisplayControlModeShift
+	DisplayControlMode0 = 0x00 << DisplayControlModeShift
+	DisplayControlMode1 = 0x01 << DisplayControlModeShift
+	DisplayControlMode2 = 0x02 << DisplayControlModeShift
+	DisplayControlMode3 = 0x03 << DisplayControlModeShift
+	DisplayControlMode4 = 0x04 << DisplayControlModeShift
+	DisplayControlMode5 = 0x05 << DisplayControlModeShift
 )
 
-const RegDisplayControlGameBoyColor = 0x08
-const RegDisplayControlPageSelect = 0x10
-const RegDisplayControlHBlankOAM = 0x20
-const RegDisplayControl1DObjectMapping = 0x40
-const RegDisplayControlScreenBlank = 0x80
+const DisplayControlGameBoyColor = 0x08
+const DisplayControlPageSelect = 0x10
+const DisplayControlHBlankOAM = 0x20
+const DisplayControl1DObjectMapping = 0x40
+const DisplayControlScreenBlank = 0x80
 
 const (
-	RegDisplayControlBgMask  = 0x0F00
-	RegDisplayControlBgShift = 8
+	DisplayControlBgMask  = 0x0F00
+	DisplayControlBgShift = 8
 
-	RegDisplayControlBg0             = 0x01 << RegDisplayControlBgShift
-	RegDisplayControlBg1             = 0x02 << RegDisplayControlBgShift
-	RegDisplayControlBg2             = 0x04 << RegDisplayControlBgShift
-	RegDisplayControlBg3             = 0x08 << RegDisplayControlBgShift
-	RegDisplayControlObjectRendering = 0x10 << RegDisplayControlBgShift
-)
-
-const (
-	RegDisplayControlWindowMask  = 0xE000
-	RegDisplayControlWindowShift = 13
-
-	RegDisplayControlWindow0      = 0x01 << RegDisplayControlWindowShift
-	RegDisplayControlWindow1      = 0x02 << RegDisplayControlWindowShift
-	RegDisplayControlObjectWindow = 0x04 << RegDisplayControlWindowShift
+	DisplayControlBg0             = 0x01 << DisplayControlBgShift
+	DisplayControlBg1             = 0x02 << DisplayControlBgShift
+	DisplayControlBg2             = 0x04 << DisplayControlBgShift
+	DisplayControlBg3             = 0x08 << DisplayControlBgShift
+	DisplayControlObjectRendering = 0x10 << DisplayControlBgShift
 )
 
 const (
-	RegDisplayStatusVBlank        = 0x01
-	RegDisplayStatusHBlank        = 0x02
-	RegDisplayStatusVCountTrigger = 0x04
-	RegDisplayStatusVBlankIRQ     = 0x08
-	RegDisplayStatusHBlankIRQ     = 0x10
-	RegDisplayStatusVCountIRQ     = 0x20
+	DisplayControlWindowMask  = 0xE000
+	DisplayControlWindowShift = 13
+
+	DisplayControlWindow0      = 0x01 << DisplayControlWindowShift
+	DisplayControlWindow1      = 0x02 << DisplayControlWindowShift
+	DisplayControlObjectWindow = 0x04 << DisplayControlWindowShift
 )
 
 const (
-	RegDisplayStatusVCountTriggerMask  = 0xFF00
-	RegDisplayStatusVCountTriggerShift = 8
+	DisplayStatusVBlank        = 0x01
+	DisplayStatusHBlank        = 0x02
+	DisplayStatusVCountTrigger = 0x04
+	DisplayStatusVBlankIRQ     = 0x08
+	DisplayStatusHBlankIRQ     = 0x10
+	DisplayStatusVCountIRQ     = 0x20
+)
+
+const (
+	DisplayStatusVCountTriggerMask  = 0xFF00
+	DisplayStatusVCountTriggerShift = 8
 )
 
 // Memory handles

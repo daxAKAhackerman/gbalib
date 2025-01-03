@@ -8,7 +8,7 @@ func main() {
 		j uint32
 	)
 
-	gbalib.MemIo.RegDisplayControl.Init(gbalib.RegDisplayControlMode3, gbalib.RegDisplayControlBg2)
+	gbalib.MemIo.RegDisplayControl.Init(gbalib.DisplayControlMode3, gbalib.DisplayControlBg2)
 
 	// Fill screen with gray color
 	gbalib.M3Fill(gbalib.MakeRgb15(12, 12, 14))

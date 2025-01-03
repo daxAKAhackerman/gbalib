@@ -1,3 +1,5 @@
+// Contains helpers to interact 16bits bitmaps
+
 package gbalib
 
 func Bmp16Plot(x, y, w int32, c uint16, d *[]uint16) {

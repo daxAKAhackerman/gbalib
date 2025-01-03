@@ -4,8 +4,8 @@ import "gbalib"
 
 func main() {
 	gbalib.MemIo.RegDisplayControl.Init(
-		gbalib.RegDisplayControlMode3,
-		gbalib.RegDisplayControlBg2,
+		gbalib.DisplayControlMode3,
+		gbalib.DisplayControlBg2,
 	)
 
 	gbalib.M3Plot(120, 80, gbalib.MakeRgb15(31, 0, 0)) // or gbalib.ClrRed
