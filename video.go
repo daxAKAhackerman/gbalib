@@ -105,6 +105,39 @@ func M4Plot(x, y int32, cid uint8) {
 	Bmp8Plot(x, y, M4Width, cid, &s)
 }
 
+func M4HLine(x1, y, x2 int32, cid uint8) {
+	s := unsafe.Slice(VidPage, M4Width*M4Height/2)
+	Bmp8HLine(x1, y, x2, M4Width, cid, &s)
+}
+
+func M4VLine(x, y1, y2 int32, cid uint8) {
+	s := unsafe.Slice(VidPage, M4Width*M4Height/2)
+	Bmp8VLine(x, y1, y2, M4Width, cid, &s)
+}
+
+func M4Line(x1, y1, x2, y2 int32, cid uint8) {
+	s := unsafe.Slice(VidPage, M4Width*M4Height/2)
+	Bmp8Line(x1, y1, x2, y2, M4Width, cid, &s)
+}
+
+func M4Rect(left, top, right, bottom int32, cid uint8) {
+	s := unsafe.Slice(VidPage, M4Width*M4Height/2)
+	Bmp8Rect(left, top, right, bottom, M4Width, cid, &s)
+}
+
+func M4Frame(left, top, right, bottom int32, cid uint8) {
+	s := unsafe.Slice(VidPage, M4Width*M4Height/2)
+	Bmp8Frame(left, top, right, bottom, M4Width, cid, &s)
+}
+
+func M4Fill(cid uint8) {
+	MemSet32((*uint32)(unsafe.Pointer(VidPage)), uint32(cid)|uint32(cid)<<8|uint32(cid)<<16|uint32(cid)<<24, uint32(M4Width*M4Height/4))
+}
+
+func M4Clear() {
+	MemSet32((*uint32)(unsafe.Pointer(VidPage)), 0x00, uint32(M4Width*M4Height/4))
+}
+
 func M5Plot(x, y int32, c Color) {
 	s := unsafe.Slice(VidPage, M5Width*M5Height)
 	Bmp16Plot(x, y, M5Width, uint16(c), &s)
