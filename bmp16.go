@@ -52,15 +52,16 @@ func Bmp16Line(x1, y1, x2, y2, w int32, c uint16, d *[]uint16) {
 	}
 
 	// Draw
-	if dy == 0 { // Horizontal
+	switch {
+	case dy == 0: // Horizontal
 		for i := int32(0); i < dx; i++ {
 			(*d)[y1*w+i*xstep] = c
 		}
-	} else if dx == 0 { // Vertical
+	case dx == 0: // Vertical
 		for i := int32(0); i < dy; i++ {
 			(*d)[(y1+i)*w] = c
 		}
-	} else if dx >= dy { // Diagonal, slope <= 1
+	case dx >= dy: // Diagonal, slope <= 1
 		dd = 2*dy - dx
 
 		ii := y1*w + x1
@@ -74,7 +75,7 @@ func Bmp16Line(x1, y1, x2, y2, w int32, c uint16, d *[]uint16) {
 			dd += 2 * dy
 			ii += xstep
 		}
-	} else { // Diagonal, slope > 1
+	default: // Diagonal, slope > 1
 		dd = 2*dx - dy
 
 		ii := y1*w + x1

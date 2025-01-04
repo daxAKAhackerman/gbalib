@@ -71,6 +71,73 @@ func Bmp8VLine(x, y1, y2, w int32, cid uint8, d *[]uint16) {
 }
 
 func Bmp8Line(x1, y1, x2, y2, w int32, cid uint8, d *[]uint16) {
+	var dx, dy, xstep, ystep, dd int32
+
+	if y1 == y2 { // Horizontal
+		Bmp8HLine(x1, y1, x2, w, cid, d)
+		return
+	} else if x1 == x2 { // Vertical
+		Bmp8VLine(x1, y1, y2, w, cid, d)
+		return
+	}
+
+	// Normalize
+	if x1 > x2 {
+		xstep = -1
+		dx = x1 - x2
+	} else {
+		xstep = +1
+		dx = x2 - x1
+	}
+
+	if y1 > y2 {
+		ystep = -w
+		dy = y1 - y2
+	} else {
+		ystep = +w
+		dy = y2 - y1
+	}
+
+	mask := uint16(255)
+
+	cid16 := uint16(cid) | uint16(cid)<<8
+	if x1%2 != 0 {
+		mask = ^mask
+	}
+
+	if dx >= dy { // Diagonal, slope <= 1
+		dd = 2*dy - dx
+
+		ii := y1*w + x1
+		for i := int32(0); i <= dx; i++ {
+			volatile.StoreUint16(&(*d)[ii/2], ((*d)[ii/2]&^mask)|(uint16(cid16)&mask))
+
+			if dd >= 0 {
+				dd -= 2 * dx
+				ii += ystep
+			}
+
+			dd += 2 * dy
+			ii += xstep
+			mask = ^mask
+		}
+	} else { // Diagonal, slope > 1
+		dd = 2*dx - dy
+
+		ii := y1*w + x1
+		for i := int32(0); i <= dy; i++ {
+			volatile.StoreUint16(&(*d)[ii/2], ((*d)[ii/2]&^mask)|(uint16(cid16)&mask))
+
+			if dd >= 0 {
+				dd -= 2 * dy
+				ii += xstep
+				mask = ^mask
+			}
+
+			dd += 2 * dx
+			ii += ystep
+		}
+	}
 }
 
 func Bmp8Rect(left, top, right, bottom, w int32, cid uint8, d *[]uint16) {
