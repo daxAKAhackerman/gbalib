@@ -49,9 +49,9 @@ const (
 var MemVram = (*uint16)(unsafe.Pointer(uintptr(MemVramAddr)))
 var MemVramBack = (*uint16)(unsafe.Pointer(uintptr(MemVramBackAddr)))
 var M3MemVram = (*[M3Height][M3Width]Color)(unsafe.Pointer(MemVram))
-var M4MemVram = (*[M4Height][M4Width]uint8)(unsafe.Pointer(MemVram))
+var M4MemVramFront = (*[M4Height][M4Width]uint8)(unsafe.Pointer(MemVram))
 var M4MemVramBack = (*[M4Height][M4Width]uint8)(unsafe.Pointer(MemVramBack))
-var M5MemVram = (*[M5Height][M5Width]Color)(unsafe.Pointer(MemVram))
+var M5MemVramFront = (*[M5Height][M5Width]Color)(unsafe.Pointer(MemVram))
 var M5MemVramBack = (*[M5Height][M5Width]Color)(unsafe.Pointer(MemVramBack))
 
 var VidPage = MemVramBack
