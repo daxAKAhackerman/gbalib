@@ -27,14 +27,14 @@ func Bmp8HLine(x1, y, x2, w int32, cid uint8, d *[]uint16) {
 	// Draw
 	// Left unaligned pixel
 	if x1%2 != 0 {
-		volatile.StoreUint16(&(*d)[y*w+x1/2], (*d)[y*w+x1/2]&0xFF|uint16(cid)<<8)
+		volatile.StoreUint16(&(*d)[(y*w+x1)/2], (*d)[(y*w+x1)/2]&0xFF|uint16(cid)<<8)
 		width--
 		x1++
 	}
 
 	// Right unaligned pixel
 	if width%2 != 0 {
-		volatile.StoreUint16(&(*d)[y*w+x2/2], (*d)[y*w+x2/2]&0xFF00|uint16(cid))
+		volatile.StoreUint16(&(*d)[(y*w+x2)/2], (*d)[(y*w+x2)/2]&0xFF00|uint16(cid))
 		width--
 		x2--
 	}
@@ -43,7 +43,7 @@ func Bmp8HLine(x1, y, x2, w int32, cid uint8, d *[]uint16) {
 
 	// Aligned line
 	if width > 0 {
-		MemSet16(&(*d)[y*w+x1/2], uint16(cid)|uint16(cid)<<8, uint32(width))
+		MemSet16(&(*d)[(y*w+x1)/2], uint16(cid)|uint16(cid)<<8, uint32(width))
 	}
 }
 
@@ -141,7 +141,64 @@ func Bmp8Line(x1, y1, x2, y2, w int32, cid uint8, d *[]uint16) {
 }
 
 func Bmp8Rect(left, top, right, bottom, w int32, cid uint8, d *[]uint16) {
+	// Normalize
+	if right < left {
+		left, right = right, left
+	}
+
+	if bottom < top {
+		top, bottom = bottom, top
+	}
+
+	width, height := right-left, bottom-top
+
+	if width == 0 {
+		return
+	}
+
+	// Unaligned left
+	if left%2 != 0 {
+		theight := height
+		shiftedCid := uint16(cid) << 8
+		for i := (top*w + left) / 2; theight > 0; theight-- {
+			volatile.StoreUint16(&(*d)[i], (*d)[i]&0xFF|shiftedCid)
+			i += w / 2
+		}
+		width--
+		left++
+	}
+
+	// Unaligned right
+	if width%2 != 0 {
+		theight := height
+		for i := (top*w + right) / 2; theight > 0; theight-- {
+			volatile.StoreUint16(&(*d)[i], (*d)[i]&0xFF00|uint16(cid))
+			i += w / 2
+		}
+		width--
+	}
+
+	// Center
+	for i := top; height > 0; height-- {
+		MemSet16(&(*d)[(i*w+left)/2], uint16(cid)|uint16(cid)<<8, uint32(width/2))
+		i++
+	}
 }
 
 func Bmp8Frame(left, top, right, bottom, w int32, cid uint8, d *[]uint16) {
+	// Normalize
+	if right < left {
+		left, right = right, left
+	}
+
+	if bottom < top {
+		top, bottom = bottom, top
+	}
+
+	// Draw
+	Bmp8HLine(left, top, right, w, cid, d)
+	Bmp8HLine(left, bottom-1, right, w, cid, d)
+
+	Bmp8VLine(left, top+1, bottom, w, cid, d)
+	Bmp8VLine(right-1, top+1, bottom, w, cid, d)
 }
