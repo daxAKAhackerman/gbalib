@@ -19,40 +19,40 @@ type VolatileReg32 struct {
 
 // Helpers
 
-func (r *VolatileReg16) Init(v ...uint16) {
+func (r *VolatileReg16) Init(values ...uint16) {
 	var newRegValue uint16
 
-	for _, value := range v {
+	for _, value := range values {
 		newRegValue |= value
 	}
 
 	r.Set(newRegValue)
 }
 
-func (r *VolatileReg32) Init(v ...uint32) {
+func (r *VolatileReg32) Init(values ...uint32) {
 	var newRegValue uint32
 
-	for _, value := range v {
+	for _, value := range values {
 		newRegValue |= value
 	}
 
 	r.Set(newRegValue)
 }
 
-func (r *VolatileReg16) Update(v ...uint16) {
+func (r *VolatileReg16) Update(values ...uint16) {
 	var newRegValue uint16
 
-	for _, value := range v {
+	for _, value := range values {
 		newRegValue |= value
 	}
 
 	r.SetBits(newRegValue)
 }
 
-func (r *VolatileReg32) Update(v ...uint32) {
+func (r *VolatileReg32) Update(values ...uint32) {
 	var newRegValue uint32
 
-	for _, value := range v {
+	for _, value := range values {
 		newRegValue |= value
 	}
 
@@ -107,56 +107,56 @@ func (r *VolatileReg32) ClearField(mask uint32) {
 	r.Set(r.Get() &^ mask)
 }
 
-func MemSet16(destination *uint16, value uint16, hwcount uint32) {
+func MemSet16(destination *uint16, value uint16, halfWordCount uint32) {
 	if uintptr(unsafe.Pointer(destination))%4 != 0 {
 		*destination = value
 		destination = (*uint16)(unsafe.Pointer((uintptr(unsafe.Pointer(destination)) + 2)))
-		hwcount--
+		halfWordCount--
 	}
 
-	leftover := hwcount%2 != 0
-	wcount := hwcount / 2
+	leftover := halfWordCount%2 != 0
+	wordCount := halfWordCount / 2
 
-	MemSet32((*uint32)(unsafe.Pointer(destination)), uint32(value)|uint32(value)<<16, wcount)
+	MemSet32((*uint32)(unsafe.Pointer(destination)), uint32(value)|uint32(value)<<16, wordCount)
 
 	if leftover {
-		lastptr := uintptr(unsafe.Pointer(destination)) + uintptr(wcount)*4
+		lastptr := uintptr(unsafe.Pointer(destination)) + uintptr(wordCount)*4
 		*(*uint16)(unsafe.Pointer(lastptr)) = value
 	}
 }
 
-func MemSet32(destination *uint32, value uint32, wcount uint32) {
-	s := unsafe.Slice(destination, wcount)
+func MemSet32(destination *uint32, value uint32, wordCount uint32) {
+	destinationSlice := unsafe.Slice(destination, wordCount)
 
-	for i := uint32(0); i < wcount; i++ {
-		s[i] = uint32(value) | uint32(value)<<16
+	for i := uint32(0); i < wordCount; i++ {
+		destinationSlice[i] = uint32(value) | uint32(value)<<16
 	}
 }
 
-func MemCpy16(destination *uint16, source *uint16, hwcount uint32) {
+func MemCpy16(destination *uint16, source *uint16, halfWordCount uint32) {
 	if uintptr(unsafe.Pointer(destination))%4 != 0 {
 		*destination = *source
 		destination = (*uint16)(unsafe.Pointer((uintptr(unsafe.Pointer(destination)) + 2)))
 		source = (*uint16)(unsafe.Pointer((uintptr(unsafe.Pointer(source)) + 2)))
-		hwcount--
+		halfWordCount--
 	}
 
-	leftover := hwcount%2 != 0
-	wcount := hwcount / 2
+	leftover := halfWordCount%2 != 0
+	wordCount := halfWordCount / 2
 
-	MemCpy32((*uint32)(unsafe.Pointer(destination)), (*uint32)(unsafe.Pointer(source)), wcount)
+	MemCpy32((*uint32)(unsafe.Pointer(destination)), (*uint32)(unsafe.Pointer(source)), wordCount)
 
 	if leftover {
-		lastdptr := uintptr(unsafe.Pointer(destination)) + uintptr(wcount)*4
-		lastsptr := uintptr(unsafe.Pointer(source)) + uintptr(wcount)*4
+		lastdptr := uintptr(unsafe.Pointer(destination)) + uintptr(wordCount)*4
+		lastsptr := uintptr(unsafe.Pointer(source)) + uintptr(wordCount)*4
 		*(*uint16)(unsafe.Pointer(lastdptr)) = *(*uint16)(unsafe.Pointer(lastsptr))
 	}
 }
 
 func MemCpy32(destination *uint32, source *uint32, wcount uint32) {
-	d := unsafe.Slice(destination, wcount)
-	s := unsafe.Slice(source, wcount)
+	destinationSlice := unsafe.Slice(destination, wcount)
+	sourceSlice := unsafe.Slice(source, wcount)
 	for i := uint32(0); i < wcount; i++ {
-		d[i] = s[i]
+		destinationSlice[i] = sourceSlice[i]
 	}
 }

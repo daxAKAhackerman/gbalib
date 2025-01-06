@@ -6,8 +6,8 @@ import (
 )
 
 func loadGfx() {
-	frontptr := unsafe.Slice((*uint32)(unsafe.Pointer(gbalib.MemVram)), (gbalib.MemVramBackAddr-gbalib.MemVramAddr)/4)
-	backptr := unsafe.Slice((*uint32)(unsafe.Pointer(gbalib.MemVramBack)), (gbalib.MemVramBackAddr-gbalib.MemVramAddr)/4)
+	frontptr := unsafe.Slice((*uint32)(unsafe.Pointer(gbalib.MemVram.FrontPagePtr)), (gbalib.MemVramBackAddr-gbalib.MemVramAddr)/4)
+	backptr := unsafe.Slice((*uint32)(unsafe.Pointer(gbalib.MemVram.BackPagePtr)), (gbalib.MemVramBackAddr-gbalib.MemVramAddr)/4)
 	for i := 0; i < 16; i++ {
 		gbalib.MemCpy32(&frontptr[i*240/4], &FrontBitmap[i*144/4], 144/4)
 		gbalib.MemCpy32(&backptr[i*240/4], &BackBitmap[i*144/4], 144/4)
@@ -18,7 +18,7 @@ func loadGfx() {
 	// Just mind your types, though. No sense in copying from a 32bit
 	// array to a 16bit one.
 	for i := 0; i < 8; i++ {
-		gbalib.MemPalBg[i] = gbalib.Color(FrontPal[i])
+		gbalib.MemPal.Bg[i] = (*[16]gbalib.Color)(unsafe.Pointer(&FrontPal))[i]
 	}
 }
 
@@ -32,7 +32,7 @@ func main() {
 		for gbalib.KeyDownNow(gbalib.KeyInputStart) {
 		}
 
-		gbalib.VidVsync()
+		gbalib.VidVSync()
 		i++
 		if i == 60 {
 			i = 0

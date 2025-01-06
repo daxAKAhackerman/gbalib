@@ -9,10 +9,10 @@ import "unsafe"
 type Key uint16
 
 type MemIoType struct {
-	RegDisplayControl  *VolatileReg32
-	RegDisplayStatus   *VolatileReg16
-	RegScanlineCounter *VolatileReg16
-	RegKeyInput        *VolatileReg16
+	RegDisplayControl *VolatileReg32
+	RegDisplayStatus  *VolatileReg16
+	RegVCount         *VolatileReg16
+	RegKeyInput       *VolatileReg16
 }
 
 // Memory maps
@@ -20,7 +20,7 @@ type MemIoType struct {
 const MemIoAddr = 0x04000000
 const RegDisplayControlAddr = MemIoAddr + 0x00
 const RegDisplayStatusAddr = MemIoAddr + 0x04
-const RegScanlineCounterAddr = MemIoAddr + 0x06
+const RegVCountAddr = MemIoAddr + 0x06
 const RegKeyInputAddr = MemIoAddr + 0x0130
 
 // Memory defs
@@ -93,10 +93,10 @@ const (
 // Memory handles
 
 var MemIo = MemIoType{
-	RegDisplayControl:  (*VolatileReg32)(unsafe.Pointer(uintptr(RegDisplayControlAddr))),
-	RegDisplayStatus:   (*VolatileReg16)(unsafe.Pointer(uintptr(RegDisplayStatusAddr))),
-	RegScanlineCounter: (*VolatileReg16)(unsafe.Pointer(uintptr(RegScanlineCounterAddr))),
-	RegKeyInput:        (*VolatileReg16)(unsafe.Pointer(uintptr(RegKeyInputAddr))),
+	RegDisplayControl: (*VolatileReg32)(unsafe.Pointer(uintptr(RegDisplayControlAddr))),
+	RegDisplayStatus:  (*VolatileReg16)(unsafe.Pointer(uintptr(RegDisplayStatusAddr))),
+	RegVCount:         (*VolatileReg16)(unsafe.Pointer(uintptr(RegVCountAddr))),
+	RegKeyInput:       (*VolatileReg16)(unsafe.Pointer(uintptr(RegKeyInputAddr))),
 }
 
 // Helpers
