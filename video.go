@@ -182,3 +182,10 @@ func VidFlip() *uint16 {
 
 	return VidPage
 }
+
+func VidVsync() {
+	for MemIo.RegScanlineCounter.Get() >= 160 { // wait till VDraw
+	}
+	for MemIo.RegScanlineCounter.Get() < 160 { // wait till VBlank
+	}
+}

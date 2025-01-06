@@ -156,5 +156,7 @@ func MemCpy16(destination *uint16, source *uint16, hwcount uint32) {
 func MemCpy32(destination *uint32, source *uint32, wcount uint32) {
 	d := unsafe.Slice(destination, wcount)
 	s := unsafe.Slice(source, wcount)
-	copy(d, s)
+	for i := uint32(0); i < wcount; i++ {
+		d[i] = s[i]
+	}
 }

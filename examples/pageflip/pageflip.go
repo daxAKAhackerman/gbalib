@@ -6,11 +6,11 @@ import (
 )
 
 func loadGfx() {
-	frontptr := *(*[]uint32)(unsafe.Pointer(gbalib.M4MemVramFront))
-	backptr := *(*[]uint32)(unsafe.Pointer(gbalib.M4MemVramBack))
+	frontptr := unsafe.Slice((*uint32)(unsafe.Pointer(gbalib.MemVram)), (gbalib.MemVramBackAddr-gbalib.MemVramAddr)/4)
+	backptr := unsafe.Slice((*uint32)(unsafe.Pointer(gbalib.MemVramBack)), (gbalib.MemVramBackAddr-gbalib.MemVramAddr)/4)
 	for i := 0; i < 16; i++ {
-		gbalib.MemCpy32(&frontptr[i*120], (*uint32)(unsafe.Pointer(&FrontBitmap[i*144/4])), 144)
-		gbalib.MemCpy32(&backptr[i*120], (*uint32)(unsafe.Pointer(&BackBitmap[i*144/4])), 144)
+		gbalib.MemCpy32(&frontptr[i*240/4], &FrontBitmap[i*144/4], 144/4)
+		gbalib.MemCpy32(&backptr[i*240/4], &BackBitmap[i*144/4], 144/4)
 	}
 
 	// You don't have to do everything with memcpy.
@@ -23,8 +23,20 @@ func loadGfx() {
 }
 
 func main() {
+	var i = 0
+
 	loadGfx()
 	gbalib.MemIo.RegDisplayControl.Init(gbalib.DisplayControlBg2, gbalib.DisplayControlMode4)
+
 	for {
+		for gbalib.KeyDownNow(gbalib.KeyInputStart) {
+		}
+
+		gbalib.VidVsync()
+		i++
+		if i == 60 {
+			i = 0
+			gbalib.VidFlip()
+		}
 	}
 }
