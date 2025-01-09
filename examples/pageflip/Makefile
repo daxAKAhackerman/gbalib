@@ -1,6 +1,6 @@
 # --- Project details -------------------------------------------------
 
-PROJ    := pageflip
+PROJ    := $(notdir $(CURDIR))
 TARGET  := $(PROJ)
 
 # --- Build defines ---------------------------------------------------

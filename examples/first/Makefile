@@ -1,6 +1,6 @@
 # --- Project details -------------------------------------------------
 
-PROJ    := first
+PROJ    := $(notdir $(CURDIR))
 TARGET  := $(PROJ)
 
 # --- Build defines ---------------------------------------------------
@@ -16,7 +16,7 @@ TYNYGO_TARGET   := -target=gameboy-advance
 build: $(TARGET).gba
 
 $(TARGET).gba : %.gba : %.go
-	$(TINYGO_BUILD) $(TYNYGO_TARGET) -o $@ $<
+	$(TINYGO_BUILD) $(TYNYGO_TARGET) -o $@ .
 		
 # --- Clean -----------------------------------------------------------
 
